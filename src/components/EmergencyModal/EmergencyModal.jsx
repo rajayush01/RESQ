@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { X, Ambulance, Hospital, CheckCircle, AlertTriangle, Upload, MapPin } from "lucide-react";
+import {
+  X,
+  Ambulance,
+  Hospital,
+  CheckCircle,
+  AlertTriangle,
+  Upload,
+  MapPin,
+} from "lucide-react";
 
 // Mock Data
 const MOCK_RESCUE_TEAMS = [
@@ -41,49 +49,54 @@ const MOCK_SHELTERS = [
 ];
 
 // Confirmation Modal Component
-const EmergencyConfirmationModal = ({ isOpen, onClose, rescueTeam, shelters }) => {
+const EmergencyConfirmationModal = ({
+  isOpen,
+  onClose,
+  rescueTeam,
+  shelters,
+}) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg relative animate-fadeIn">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex justify-center items-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg md:max-w-xl relative animate-fadeIn max-h-[90vh] overflow-y-auto">
         {/* Close Button */}
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-all duration-300"
-          >
-            <X size={24} />
-          </button>
-        </div>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-all duration-300"
+        >
+          <X size={24} />
+        </button>
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <CheckCircle className="text-green-600" size={32} />
-          <h2 className="text-2xl font-semibold text-gray-800">Emergency Reported</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Emergency Reported
+          </h2>
         </div>
 
         {/* Rescue Team Section */}
-        <div className="bg-red-50 border border-red-200 rounded-lg p-5 mb-6 shadow-md transition-all duration-300 hover:shadow-lg">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-5 mb-6 shadow-md hover:shadow-lg transition-all duration-300">
           <h3 className="text-lg font-semibold text-red-700 flex items-center mb-3">
             <Ambulance className="mr-2 text-red-600" size={24} />
             Nearest Rescue Team
           </h3>
           <div className="space-y-2 text-sm text-gray-700">
             <p>
-              <strong className="font-medium">Team Name:</strong> {rescueTeam.name}
+              <strong>Team Name:</strong> {rescueTeam.name}
             </p>
             <p>
-              <strong className="font-medium">Type:</strong> {rescueTeam.type}
+              <strong>Type:</strong> {rescueTeam.type}
             </p>
             <p>
-              <strong className="font-medium">Contact:</strong> {rescueTeam.contactNumber}
+              <strong>Contact:</strong> {rescueTeam.contactNumber}
             </p>
             <p>
-              <strong className="font-medium">Distance:</strong> {rescueTeam.distance}
+              <strong>Distance:</strong> {rescueTeam.distance}
             </p>
             <p>
-              <strong className="font-medium">Estimated Arrival:</strong> {rescueTeam.eta}
+              <strong>Estimated Arrival:</strong> {rescueTeam.eta}
             </p>
           </div>
         </div>
@@ -94,24 +107,28 @@ const EmergencyConfirmationModal = ({ isOpen, onClose, rescueTeam, shelters }) =
             <Hospital className="mr-2 text-blue-600" size={24} />
             Nearby Shelters
           </h3>
-          {shelters.map((shelter) => (
-            <div
-              key={shelter.id}
-              className="mb-4 pb-4 border-b last:border-b-0 last:pb-0"
-            >
-              <p className="text-base font-medium text-gray-800">{shelter.name}</p>
-              <p className="text-sm text-gray-600">{shelter.address}</p>
-              <p className="text-sm text-gray-700">
-                <strong>Capacity:</strong> {shelter.capacity}
-              </p>
-              <p className="text-sm text-gray-700">
-                <strong>Distance:</strong> {shelter.distance}
-              </p>
-              <p className="text-sm text-gray-700">
-                <strong>Facilities:</strong> {shelter.facilities.join(", ")}
-              </p>
-            </div>
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {shelters.map((shelter) => (
+              <div
+                key={shelter.id}
+                className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition duration-300"
+              >
+                <p className="text-base font-medium text-gray-800">
+                  {shelter.name}
+                </p>
+                <p className="text-sm text-gray-600">{shelter.address}</p>
+                <p className="text-sm text-gray-700">
+                  <strong>Capacity:</strong> {shelter.capacity}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <strong>Distance:</strong> {shelter.distance}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <strong>Facilities:</strong> {shelter.facilities.join(", ")}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Close Button */}
@@ -140,14 +157,14 @@ const EmergencyModal = ({ isOpen, onClose }) => {
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     setImages((prevImages) => [...prevImages, ...files]);
-    
-    const urls = files.map(file => URL.createObjectURL(file));
+
+    const urls = files.map((file) => URL.createObjectURL(file));
     setImageURLs((prevURLs) => [...prevURLs, ...urls]);
   };
 
   const removeImage = (index) => {
-    setImages(prevImages => prevImages.filter((_, i) => i !== index));
-    setImageURLs(prevURLs => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setImageURLs((prevURLs) => {
       URL.revokeObjectURL(prevURLs[index]);
       return prevURLs.filter((_, i) => i !== index);
     });
@@ -176,24 +193,19 @@ const EmergencyModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = () => {
-    // Only location is compulsory
     if (!location) {
       alert("Please capture your location before reporting an emergency.");
       return;
     }
 
-    // Prepare emergency details
     const emergencyDetails = {
       description: description || "No additional details provided",
       location,
       images,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
-    // Log details (in real app, send to backend)
     console.log(emergencyDetails);
-
-    // Show confirmation modal
     setShowConfirmation(true);
   };
 
@@ -205,14 +217,12 @@ const EmergencyModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4 overflow-y-auto">
       {!showConfirmation ? (
-        <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md animate-fadeIn">
+        <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg animate-fadeIn">
           <div className="flex items-center gap-2 mb-6">
             <AlertTriangle className="text-red-600" size={28} />
-            <h2 className="text-2xl font-bold text-red-600">
-              Report Emergency
-            </h2>
+            <h2 className="text-2xl font-bold text-red-600">Report Emergency</h2>
           </div>
 
           <div className="space-y-6">
@@ -225,7 +235,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Provide any additional information about the emergency (optional)"
-                className="w-full h-32 px-4 py-3 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all resize-none"
+                className="w-full h-32 px-4 py-3 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all resize-none text-sm sm:text-base"
               />
             </div>
 
@@ -234,26 +244,26 @@ const EmergencyModal = ({ isOpen, onClose }) => {
               <label className="block text-gray-700 font-medium mb-2">
                 Upload Images (Optional)
               </label>
-              <div className="relative">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer group"
-                >
-                  <Upload className="text-gray-400 group-hover:text-blue-500 mr-2" size={20} />
-                  <span className="text-gray-600 group-hover:text-blue-500">Choose files</span>
-                </label>
-              </div>
-              
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="image-upload"
+              />
+              <label
+                htmlFor="image-upload"
+                className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer group"
+              >
+                <Upload className="text-gray-400 group-hover:text-blue-500 mr-2" size={20} />
+                <span className="text-gray-600 group-hover:text-blue-500">
+                  Choose files
+                </span>
+              </label>
+
               {imageURLs.length > 0 && (
-                <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {imageURLs.map((url, index) => (
                     <div key={index} className="relative group">
                       <img
@@ -273,29 +283,29 @@ const EmergencyModal = ({ isOpen, onClose }) => {
               )}
             </div>
 
-            {/* Location Capture (Compulsory) */}
+            {/* Location Capture */}
             <div>
               <button
                 onClick={handleGetLocation}
                 className={`flex items-center justify-center w-full px-4 py-3 ${
-                  location 
-                    ? "bg-green-500 hover:bg-green-600" 
+                  location
+                    ? "bg-green-500 hover:bg-green-600"
                     : "bg-red-500 hover:bg-red-600"
                 } text-white font-medium rounded-lg transition-colors`}
               >
                 <MapPin className="mr-2" size={20} />
                 {location ? "Location Captured" : "Share Location (Required)"}
               </button>
-              
+
               {locationError && (
                 <p className="mt-2 text-sm text-red-500">
-                  Unable to capture location. Please try again or check your device settings.
+                  Unable to capture location. Please try again.
                 </p>
               )}
-              
               {location && (
                 <p className="mt-2 text-sm text-gray-500">
-                  Latitude: {location.latitude.toFixed(6)}, Longitude: {location.longitude.toFixed(6)}
+                  Latitude: {location.latitude.toFixed(6)}, Longitude:{" "}
+                  {location.longitude.toFixed(6)}
                 </p>
               )}
             </div>
@@ -306,8 +316,8 @@ const EmergencyModal = ({ isOpen, onClose }) => {
                 onClick={handleSubmit}
                 disabled={!location}
                 className={`flex-1 px-4 py-3 text-white font-medium rounded-lg transition-colors ${
-                  location 
-                    ? "bg-red-600 hover:bg-red-700" 
+                  location
+                    ? "bg-red-600 hover:bg-red-700"
                     : "bg-gray-400 cursor-not-allowed"
                 }`}
               >
@@ -323,7 +333,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
           </div>
         </div>
       ) : (
-        <EmergencyConfirmationModal 
+        <EmergencyConfirmationModal
           isOpen={showConfirmation}
           onClose={handleCloseConfirmation}
           rescueTeam={MOCK_RESCUE_TEAMS[0]}

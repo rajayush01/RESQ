@@ -42,7 +42,7 @@ const Landing = () => {
       icon: Warehouse,
       title: "Smart Resource Management",
       description:
-        "Blockchain-powered inventory tracking system for real-time resource allocation and distribution",
+        "Real-time inventory tracking system for efficient resource allocation and distribution.",
       color: "text-green-400",
     },
     {
@@ -126,12 +126,6 @@ const Landing = () => {
             >
               Report Emergency
             </button>
-            <button
-              onClick={() => navigate("/Login")}
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all shadow-xl"
-            >
-              View Live Map
-            </button>
           </div>
         </div>
       </div>
@@ -179,10 +173,10 @@ const Landing = () => {
               Register Now
             </button>
             <button
-              onClick={() => navigate("/demo")}
+              onClick={() => navigate("/SurvivalGuidance")}
               className="px-8 py-3 bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg font-semibold hover:text-slate-900 transition-all shadow-lg"
             >
-              Watch Demo
+              Survival Guidelines
             </button>
           </div>
         </div>

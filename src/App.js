@@ -5,7 +5,9 @@ import Landing from './pages/Landing/Landing';
 import Navbar from './components/Navbar/Navbar';
 import Login from './components/Login/Login';
 import Signup from './components/SignUp/SignUp';
-import Dashboard from './pages/Dashboard/Dashboard';
+import DashboardNGO from './pages/Dashboard/DashboardNGO';
+import DashboardIndividual from './pages/Dashboard/DashboardIndividual';
+import Survival from './pages/SurvivalGuidlines/Survival';
 
 const pageVariants = {
   initial: { opacity: 0, x: -50 },
@@ -76,7 +78,7 @@ const AnimatedRoutes = () => {
           }
         />
         <Route
-          path="/Dashboard"
+          path="/DashboardNGO"
           element={
             <motion.div
               initial="initial"
@@ -85,7 +87,35 @@ const AnimatedRoutes = () => {
               variants={pageVariants}
               transition={{ duration: 0.5 }}
             >
-              <Dashboard />
+              <DashboardNGO />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/DashboardIndividual"
+          element={
+            <motion.div
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={{ duration: 0.5 }}
+            >
+              <DashboardIndividual />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/SurvivalGuidance"
+          element={
+            <motion.div
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={{ duration: 0.5 }}
+            >
+              <Survival />
             </motion.div>
           }
         />

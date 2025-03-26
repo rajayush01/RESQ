@@ -20,7 +20,6 @@ const MapView = () => {
   ];
 
   const getCoordinates = async (address) => {
-    console.log('Fetching coordinates for:', address); // Debug log
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
     )}&key=${apiKey}`;
@@ -29,7 +28,6 @@ const MapView = () => {
       const data = await response.json();
       if (data.results.length > 0) {
         const location = data.results[0].geometry.location;
-        console.log('Coordinates found:', location); // Debug log
         return { lat: location.lat, lng: location.lng };
       }
     } catch (error) {
@@ -39,7 +37,6 @@ const MapView = () => {
   };
 
   const addMarkers = async (map) => {
-    console.log('Starting to add markers'); // Debug log
     setIsLoadingMarkers(true);
     try {
       for (const hotspot of hotspots) {
@@ -70,7 +67,6 @@ const MapView = () => {
 
           marker.bindPopup(popupContent);
           marker.addTo(map);
-          console.log('Added marker for:', hotspot.name); // Debug log
         }
       }
     } catch (error) {
@@ -84,7 +80,6 @@ const MapView = () => {
   useEffect(() => {
     if (mapRef.current && !mapInstanceRef.current) {
       try {
-        console.log('Initializing map'); // Debug log
         mapInstanceRef.current = L.map(mapRef.current).setView([28.6139, 77.2090], 5);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -125,19 +120,22 @@ const MapView = () => {
   const zoneCounts = getTotalsByZoneType();
 
   return (
-    <div className="min-h-screen px-6">
+    <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Disaster Hotspots Map</h2>
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
+        {/* Header Section - Responsive Typography */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-0">
+            Disaster Hotspots Map
+          </h2>
+          <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
             {isLoadingMarkers ? (
               <div className="flex items-center space-x-2">
-                <Loader className="w-4 h-4 animate-spin" />
+                <Loader className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
                 <span>Loading markers...</span>
               </div>
             ) : (
               <>
-                <MapPin className="w-4 h-4" />
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Live Updates</span>
               </>
             )}
@@ -145,48 +143,56 @@ const MapView = () => {
         </div>
         
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
+            {/* Map Container - Responsive Sizing */}
             <div className="aspect-video bg-gray-50 rounded-lg overflow-hidden shadow-inner relative">
               <div 
                 ref={mapRef} 
                 className="h-full w-full rounded-lg"
-                style={{ minHeight: '500px' }}
+                style={{ 
+                  minHeight: '300px',  // Smaller on mobile
+                  maxHeight: '600px'   // Max height on larger screens
+                }}
               />
               {!isMapReady && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75">
-                  <Loader className="w-8 h-8 animate-spin text-gray-500" />
+                  <Loader className="w-6 h-6 sm:w-8 sm:h-8 animate-spin text-gray-500" />
                 </div>
               )}
             </div>
             
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-red-50 rounded-xl p-4 border border-red-100 transition-transform hover:scale-105">
+            {/* Risk Zones Grid - Responsive Layout */}
+            <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              {/* High Risk Zone Card */}
+              <div className="bg-red-50 rounded-xl p-3 sm:p-4 border border-red-100 transition-transform hover:scale-105">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-red-900">High Risk Zones</h3>
-                    <p className="text-red-700 text-2xl font-bold mt-1">{zoneCounts.High}</p>
+                    <h3 className="text-sm sm:text-base font-semibold text-red-900">High Risk Zones</h3>
+                    <p className="text-xl sm:text-2xl font-bold mt-1 text-red-700">{zoneCounts.High}</p>
                   </div>
-                  <AlertTriangle className="w-8 h-8 text-red-500" />
+                  <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-red-500" />
                 </div>
               </div>
               
-              <div className="bg-orange-50 rounded-xl p-4 border border-orange-100 transition-transform hover:scale-105">
+              {/* Moderate Risk Zone Card */}
+              <div className="bg-orange-50 rounded-xl p-3 sm:p-4 border border-orange-100 transition-transform hover:scale-105">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-orange-900">Moderate Risk Zones</h3>
-                    <p className="text-orange-700 text-2xl font-bold mt-1">{zoneCounts.Moderate}</p>
+                    <h3 className="text-sm sm:text-base font-semibold text-orange-900">Moderate Risk Zones</h3>
+                    <p className="text-xl sm:text-2xl font-bold mt-1 text-orange-700">{zoneCounts.Moderate}</p>
                   </div>
-                  <AlertTriangle className="w-8 h-8 text-orange-500" />
+                  <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" />
                 </div>
               </div>
               
-              <div className="bg-green-50 rounded-xl p-4 border border-green-100 transition-transform hover:scale-105">
+              {/* Low Risk Zone Card */}
+              <div className="bg-green-50 rounded-xl p-3 sm:p-4 border border-green-100 transition-transform hover:scale-105">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-green-900">Low Risk Zones</h3>
-                    <p className="text-green-700 text-2xl font-bold mt-1">{zoneCounts.Low}</p>
+                    <h3 className="text-sm sm:text-base font-semibold text-green-900">Low Risk Zones</h3>
+                    <p className="text-xl sm:text-2xl font-bold mt-1 text-green-700">{zoneCounts.Low}</p>
                   </div>
-                  <Shield className="w-8 h-8 text-green-500" />
+                  <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
                 </div>
               </div>
             </div>
